@@ -42,10 +42,11 @@ public class MagicSquares {
 
 
     private static List<List<Integer>> permutationCalculator(int depth, int target, int size, List<Integer> prefix) {
-        int limit = prefix.get(prefix.size() - 1);
+
 
         if (depth == 2) {
             List<List<Integer>> permutations = new ArrayList<>();
+            int limit = prefix.get(prefix.size() - 1);
 
             for (int i = limit - 1; i > target - i; i--){
 
@@ -98,7 +99,7 @@ public class MagicSquares {
 
         System.out.println(MagicSquares.isMagicSquare(array, 3));
 
-        List<List<Integer>> permutations = permutationCalculator(4);
+        List<List<Integer>> permutations = permutationCalculator(3);
 
         for (List<Integer> l : permutations) {
             for (Integer i : l) {
