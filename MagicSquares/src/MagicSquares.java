@@ -1,3 +1,8 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MagicSquares {
 
     static public boolean isMagicSquare(int [][] arr, int size) {
@@ -31,15 +36,60 @@ public class MagicSquares {
         }
     }
 
-    private static int[][] permutations(int depth, int sum)
+    //private static int[] permutationCalculator(int depth, int sum, int maxSize) {
 
-    private static int[][] permutations(int size) {
-        int magicNumber = size * (size * size + 1) / 2;
+    //}
 
+
+    private static List<List<Integer>> permutationCalculator(int depth, int target, int size, List<Integer> prefix) {
+        int limit = prefix.get(prefix.size() - 1);
+
+        if (depth == 2) {
+            List<List<Integer>> permutations = new ArrayList<>();
+
+            for (int i = limit - 1; i > target - i; i--){
+
+
+                if (target - i < 1) {
+                    continue;
+                }
+
+                List<Integer> perm = new ArrayList<>(prefix);
+                perm.add(i);
+                perm.add(target - i);
+
+                permutations.add(perm);
+
+            }
+
+            return permutations;
+        }
+
+        List<List<Integer>> permutations = new ArrayList<>();
+
+
+
+        for (int i = size*size; i > 0; i--) {
+            List<Integer> newPrefix = new ArrayList<>(prefix);
+            newPrefix.add(i);
+            List<List<Integer>> perms = permutationCalculator(depth - 1, target - i, size, newPrefix);
+
+            for (List<Integer> l : perms) {
+                permutations.add(l);
+            }
+        }
+
+        return permutations;
 
     }
 
-    public static int[][] magicSquare(int size) {
+    private static List<List<Integer>> permutationCalculator(int size) {
+        int magicNumber = size * (size * size + 1) / 2;
+
+        return permutationCalculator(size, magicNumber, size, new ArrayList<>());
+    }
+
+    public static void magicSquare(int size) {
 
     }
 
@@ -48,5 +98,13 @@ public class MagicSquares {
 
         System.out.println(MagicSquares.isMagicSquare(array, 3));
 
+        List<List<Integer>> permutations = permutationCalculator(4);
+
+        for (List<Integer> l : permutations) {
+            for (Integer i : l) {
+                System.out.printf("%d ", i);
+            }
+            System.out.println();
+        }
     }
 }
