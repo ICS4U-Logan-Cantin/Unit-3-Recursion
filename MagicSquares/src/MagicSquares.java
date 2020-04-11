@@ -194,7 +194,7 @@ public class MagicSquares {
     }
 
     private static int[][] doublyEvenMagicSquare(int n) {
-        
+
     }
 
     public static void magicSquare(int size) {
