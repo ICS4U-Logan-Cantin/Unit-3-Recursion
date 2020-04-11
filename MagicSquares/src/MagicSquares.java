@@ -47,7 +47,9 @@ public class MagicSquares {
         }
     }
 
-    // Not used anymore
+    // Not used anymore: Used for calculating all the possible combinations of integers than add up the the
+    // magic number, but for sizes past 3 it generates more possibilities than there are slots in the magic square.
+    // This IS recursive and it DOES work for all positive integers.
     private static List<List<Integer>> permutationCalculator(int depth, int target, int size, List<Integer> prefix) {
 
 
@@ -195,18 +197,53 @@ public class MagicSquares {
 
     private static int[][] doublyEvenMagicSquare(int n) {
 
+        int output[][] = new int[n][n];
+
+        // Y represents the row
+        for (int y = 0; y < n; y++) {
+
+            // x represents the row
+            for (int x = 0; x < n; x++) {
+
+                // i is the index of the box is the array was flattened out
+                int i = n * y + x;
+
+                // Categorizing the column and row as a binary digit, respectively.
+                // Middle 2 quarters of the row/column is 1, outsides is 0.
+                int vert = (x / (n / 4)) % 2 ^ ((x >= n / 2) ? 1 : 0);
+                int ho = (4 * y * n / (n * n)) % 2 ^ ((y * n >= n*n / 2) ? 1 : 0);
+
+                // Value for that position is the flattened index of that box in ascending order
+                // or descending order, depending if ho ^ vert is true or false
+                int outputValue = ((ho ^ vert) == 0) ? n * n - i : i + 1;
+
+                // Adding it to the array
+                output[x][y] = outputValue;
+            }
+        }
+
+        return output;
     }
 
-    public static void magicSquare(int size) {
-
+    // Generating the correct magic square based on the size
+    public static int[][] magicSquare(int size) {
+        if (size % 2 != 0) {
+            return oddMagicSquare(size);
+        }
+        else if (size % 4 == 0) {
+            return doublyEvenMagicSquare(size);
+        }
+        else {
+            return singlyEvenMagicSquare(size);
+        }
     }
 
+    // Testing the magic square function
     public static void main(String[] args) {
 
-        for (int n = 14; n <= 14; n += 2) {
-            int[][] answer = singlyEvenMagicSquare(n);
-
-            System.out.println(isMagicSquare(answer, n));
+        // Prints each magic square from 3 to 14
+        for (int n = 3; n <= 14; n++) {
+            int[][] answer = magicSquare(n);
 
             for (int y = 0; y < n; y++) {
                 for (int x = 0; x < n; x++) {
@@ -214,8 +251,9 @@ public class MagicSquares {
                 }
                 System.out.println();
             }
+
+            System.out.println(isMagicSquare(answer, n) ? "Is a magic Square!\n" : "Is not a magic square.");
+
         }
-
-
     }
 }
